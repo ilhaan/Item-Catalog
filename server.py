@@ -26,12 +26,14 @@ def showCategories():
 
 @app.route('/category/<int:category_id>')
 def showItemList(category_id):
-    return "This page will list all items under a category %s." % category_id
-
-@app.route('/category/<int:category_id>/<int:item_id>')
-def showItem(category_id, item_id):
-    return "This page will have a description of the %s item under the %s \
-            category." % (category_id, item_id)
+    category = session.query(Category).filter_by(id = category_id).one()
+    # creator = getUserInfo(category.user_id)
+    items = session.query(Item).filter_by(category_id = category_id).all()
+    # if 'username' not in login_session or creator.id != login_session['user_id']:
+    #     return render_template('publicitemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
+    # else:
+    #     return render_template('itemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
+    return render_template('itemlist.html', category = category, items = items)
 
 @app.route('/category/new/', methods = ['GET', 'POST'])
 def newCategory():
@@ -48,6 +50,61 @@ def newCategory():
         return render_template('newcategory.html')
         # return render_template('newcategory.html', login_session = login_session)
         # return "This is the add new item page"
+
+@app.route('/category/<int:category_id>/item/new/', methods = ['GET', 'POST'])
+def newItem(category_id):
+    # if 'username' not in login_session:
+    #     return redirect('/login/')
+    category = session.query(Category).filter_by(id = category_id).one()
+    if request.method == 'POST':
+        # newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'], price = request.form['price'], user_id = restaurant.user_id)
+        newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'])
+        session.add(newItem)
+        session.commit()
+        flash_string = "%s has been added to the list" % newItem.name
+        flash(flash_string)
+        return redirect(url_for('showItemList', category_id = category.id))
+    else:
+        # return render_template('newitem.html', category = category, login_session = login_session)
+        return render_template('newitem.html', category = category)
+
+@app.route('/category/<int:category_id>/item/<int:item_id>/edit/', methods = ['GET', 'POST'])
+def editItem(item_id, category_id):
+    # if 'username' not in login_session:
+    #     return redirect('/login/')
+    category = session.query(Category).filter_by(id = category_id).one()
+    editedItem = session.query(Item).filter_by(id = item_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editedItem.name = request.form['name']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+        # if request.form['price']:
+        #     editedItem.price = request.form['price']
+        session.add(editedItem)
+        session.commit()
+        flash_string = "%s has been edited" % editedItem.name
+        flash(flash_string)
+        return redirect(url_for('showItemList', category_id = category.id))
+    else:
+        # return render_template('edititem.html', category = category, item = editedItem, login_session = login_session)
+        return render_template('edititem.html', category = category, item = editedItem)
+
+@app.route('/category/<int:category_id>/item/<int:item_id>/delete/', methods = ['GET', 'POST'])
+def deleteItem(item_id, category_id):
+    # if 'username' not in login_session:
+    #     return redirect('/login/')
+    category = session.query(Category).filter_by(id = category_id).one()
+    deletedItem = session.query(Item).filter_by(id = item_id).one()
+    if request.method == 'POST':
+        session.delete(deletedItem)
+        session.commit()
+        flash_string = "%s has been deleted" % deletedItem.name
+        flash(flash_string)
+        return redirect(url_for('showItemList', category_id = category.id))
+    else:
+        # return render_template('deleteitem.html', category = category, item = deletedItem, login_session = login_session)
+        return render_template('deleteitem.html', category = category, item = deletedItem)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
