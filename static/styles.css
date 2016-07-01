@@ -1,4 +1,5 @@
-body            { font-family: sans-serif; background-image: url('img3.jpg'); background-color: #333333}
+body            { font-family: sans-serif; background-image: url('img3.jpg');
+                  background-color: #CACFD1}
 h1, h2, h3, h4       { color: #FFFFFF; }
 h1, h2          { font-family: 'Georgia', serif; margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
@@ -6,14 +7,32 @@ h2              { font-size: 1.2em; }
 
 p, dd, dt               { color: #CCCCCC;}
 
-a {text-decoration: none; color:#FFFFCC; font-size: .75em;}
+a {text-decoration: none; color:#FFFFCC; font-size: 0.75em;}
 
+/*Item page pane*/
 .pane {position:absolute; left: 25%; border: 2px solid;
-    border-radius: 25px; padding: 5px; margin: 5px; border-color: #999999; background-color: #333333 }
-.header         {left:50%; text-align: center;}
-.name {width:50%;display: inline-block; float: left;}
-.description {}
-.price {text-align: right; width:50%; float: right; }
-.editdeletepane{}
+    border-radius: 25px; padding: 5px; margin: 5px; border-color: #999999;
+    background-color: #1A68AC; width: 50% }
 
+/*Item page header (shows category name)*/
+.header {left:50%; text-align: center; background-color: #F56F00;}
+
+.name {width:50%; float: center;}
+
+.description {padding: 10px; font-style: italic}
+
+.price {text-align: right; width:50%; float: right; }
+
+.editdeletepane {}
+
+/*Flash messages displayed on every page*/
 .flash          { background: #cee5F5; }
+
+/*Top bar (displays login and show all categories)*/
+.top-menu{background-color: #2E45B6; text-align: center;}
+
+/*Main page header*/
+.main-header{background-color: #AC26D3; text-align: center;}
+
+/*Item list on item page*/
+.item-name {text-align: center;}
