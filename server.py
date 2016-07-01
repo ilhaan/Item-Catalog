@@ -35,6 +35,17 @@ def showItemList(category_id):
     #     return render_template('itemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
     return render_template('itemlist.html', category = category, items = items)
 
+@app.route('/category/<int:category_id>/<int:item_id>')
+def showItemPage(category_id, item_id):
+    category = session.query(Category).filter_by(id = category_id).one()
+    # creator = getUserInfo(category.user_id)
+    item = session.query(Item).filter_by(category_id = category_id, id = item_id).one()
+    # if 'username' not in login_session or creator.id != login_session['user_id']:
+    #     return render_template('publicitemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
+    # else:
+    #     return render_template('itemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
+    return render_template('itempage.html', category = category, item = item)
+
 @app.route('/category/new/', methods = ['GET', 'POST'])
 def newCategory():
     # if 'username' not in login_session:
