@@ -87,11 +87,28 @@ def newItem(category_name):
     if request.method == 'POST':
         # newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'], price = request.form['price'], user_id = restaurant.user_id)
         newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'])
-        session.add(newItem)
-        session.commit()
-        flash_string = "%s has been added to the list" % newItem.name
-        flash(flash_string)
-        return redirect(url_for('showItemList', category_name = category.name))
+
+        # Initialize duplicate name flag
+        name_exists = False
+
+        # Check if item name has been taken already
+        items = session.query(Item).all();
+        for item in items:
+            if str(item.name) == newItem.name:
+                # Set duplicate name flag
+                name_exists = True
+
+        if name_exists == True:
+            # Name has been taken, reload same page and flash message
+            flash_string = "%s is already in use. Provide a different name" % newItem.name
+            flash(flash_string)
+            return redirect(url_for('newItem', category_name = category.name))
+        else:
+            session.add(newItem)
+            session.commit()
+            flash_string = "%s has been added to the list" % newItem.name
+            flash(flash_string)
+            return redirect(url_for('showItemList', category_name = category.name))
     else:
         # return render_template('newitem.html', category = category, login_session = login_session)
         return render_template('newitem.html', category = category)
