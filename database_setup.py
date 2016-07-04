@@ -3,8 +3,15 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
+
+engine = create_engine('sqlite:///itemcatalog.db')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 class User(Base):
     __tablename__ = 'user'
@@ -32,10 +39,21 @@ class Category(Base):
     @property
     def serialize(self):
         return {
-            'name' : self.name,
             'id' : self.id,
-            'user_id' : self.user_id,
+            'name' : self.name,
+            'items' : queryItems(self.id),
         }
+
+def queryItems(id):
+    items = session.query(Item).filter_by(category_id = id).all()
+
+    # Create emmpty lists to store item names
+    item_names = []
+
+    for item in items:
+        item_names.append(item.serialize)
+
+    return item_names
 
 class Item(Base):
     __tablename__ = 'item'

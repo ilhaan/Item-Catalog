@@ -117,6 +117,11 @@ def deleteItem(item_name, category_name):
         # return render_template('deleteitem.html', category = category, item = deletedItem, login_session = login_session)
         return render_template('deleteitem.html', category = category, item = deletedItem)
 
+@app.route('/catalog.json')
+def catalog_json():
+    categories = session.query(Category).all()
+    return jsonify(Category = [i.serialize for i in categories])
+
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
