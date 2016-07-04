@@ -53,10 +53,27 @@ def newCategory():
     if request.method == 'POST':
         # newCategory = Category(name = request.form['name'], user_id = login_session['user_id'])
         newCategory = Category(name = request.form['name'])
-        session.add(newCategory)
-        session.commit()
-        flash("New category created!")
-        return redirect(url_for('showCategories'))
+
+        # Initialize duplicate name flag to false
+        name_exists = False
+
+        # Check if category name has been taken already
+        categories = session.query(Category).all();
+        for category in categories:
+            if str(category.name) == newCategory.name:
+                # Set duplicate name flag
+                name_exists = True
+
+        if name_exists == True:
+            # Name has been taken, reload same page and flash message
+            flash_string = "%s is already in use. Provide a different name" % newCategory.name
+            flash(flash_string)
+            return redirect(url_for('newCategory'))
+        else:
+            session.add(newCategory)
+            session.commit()
+            flash("New category created!")
+            return redirect(url_for('showCategories'))
     else:
         return render_template('newcategory.html')
         # return render_template('newcategory.html', login_session = login_session)

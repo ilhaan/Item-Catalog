@@ -4,8 +4,19 @@
 </head>
 
 <body>
+  <div class = 'flash'>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li> <strong> {{ message }} </strong> </li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+      {% endwith %}
+  </div>
 
-<h1> Create new category </h1>
+  <h1> Create new category </h1>
 
   <form action = "#", method = 'post'>
 
