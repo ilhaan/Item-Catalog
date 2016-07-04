@@ -10,7 +10,7 @@
 			<h1>{{ item.name }}</h1>
 		</div>
 
-	<a href = '{{url_for('newItem', category_id = category.id) }}'>Create New Item</a>
+	<a href = '{{url_for('newItem', category_name = category.name) }}'>Create New Item</a>
 
 	<div class = 'flash'>
 			      {% with messages = get_flashed_messages() %}
@@ -27,6 +27,12 @@
 	<div class = 'description'>
 		<p> {{item.description}} </p>
 	</div>
+
+	<div class = "editdeletepane">
+		<a href='{{url_for('editItem', item_name=item.name, category_name = category.name)}}' >Edit</a>
+		<a href='{{url_for('deleteItem', item_name=item.name, category_name = category.name)}}' >Delete</a>
+	</div>
+
 
  </div> <!-- end pane -->
 </body>

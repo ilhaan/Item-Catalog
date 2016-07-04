@@ -24,22 +24,22 @@ def showCategories():
     return render_template('categories.html', categories = categories)
     # return "This is the main page. All categories will be listed here."
 
-@app.route('/category/<int:category_id>')
-def showItemList(category_id):
-    category = session.query(Category).filter_by(id = category_id).one()
+@app.route('/category/<category_name>')
+def showItemList(category_name):
+    category = session.query(Category).filter_by(name = category_name).one()
     # creator = getUserInfo(category.user_id)
-    items = session.query(Item).filter_by(category_id = category_id).all()
+    items = session.query(Item).filter_by(category_id = category.id).all()
     # if 'username' not in login_session or creator.id != login_session['user_id']:
     #     return render_template('publicitemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
     # else:
     #     return render_template('itemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
     return render_template('itemlist.html', category = category, items = items)
 
-@app.route('/category/<int:category_id>/<int:item_id>')
-def showItemPage(category_id, item_id):
-    category = session.query(Category).filter_by(id = category_id).one()
+@app.route('/category/<category_name>/<item_name>')
+def showItemPage(category_name, item_name):
+    category = session.query(Category).filter_by(name = category_name).one()
     # creator = getUserInfo(category.user_id)
-    item = session.query(Item).filter_by(category_id = category_id, id = item_id).one()
+    item = session.query(Item).filter_by(category_id = category.id, name = item_name).one()
     # if 'username' not in login_session or creator.id != login_session['user_id']:
     #     return render_template('publicitemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
     # else:
@@ -62,11 +62,11 @@ def newCategory():
         # return render_template('newcategory.html', login_session = login_session)
         # return "This is the add new item page"
 
-@app.route('/category/<int:category_id>/item/new/', methods = ['GET', 'POST'])
-def newItem(category_id):
+@app.route('/category/<category_name>/item/new/', methods = ['GET', 'POST'])
+def newItem(category_name):
     # if 'username' not in login_session:
     #     return redirect('/login/')
-    category = session.query(Category).filter_by(id = category_id).one()
+    category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
         # newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'], price = request.form['price'], user_id = restaurant.user_id)
         newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'])
@@ -74,17 +74,17 @@ def newItem(category_id):
         session.commit()
         flash_string = "%s has been added to the list" % newItem.name
         flash(flash_string)
-        return redirect(url_for('showItemList', category_id = category.id))
+        return redirect(url_for('showItemList', category_name = category.name))
     else:
         # return render_template('newitem.html', category = category, login_session = login_session)
         return render_template('newitem.html', category = category)
 
-@app.route('/category/<int:category_id>/item/<int:item_id>/edit/', methods = ['GET', 'POST'])
-def editItem(item_id, category_id):
+@app.route('/category/<category_name>/item/<item_name>/edit/', methods = ['GET', 'POST'])
+def editItem(item_name, category_name):
     # if 'username' not in login_session:
     #     return redirect('/login/')
-    category = session.query(Category).filter_by(id = category_id).one()
-    editedItem = session.query(Item).filter_by(id = item_id).one()
+    category = session.query(Category).filter_by(name = category_name).one()
+    editedItem = session.query(Item).filter_by(name = item_name).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -96,23 +96,23 @@ def editItem(item_id, category_id):
         session.commit()
         flash_string = "%s has been edited" % editedItem.name
         flash(flash_string)
-        return redirect(url_for('showItemList', category_id = category.id))
+        return redirect(url_for('showItemList', category_name = category.name))
     else:
         # return render_template('edititem.html', category = category, item = editedItem, login_session = login_session)
         return render_template('edititem.html', category = category, item = editedItem)
 
-@app.route('/category/<int:category_id>/item/<int:item_id>/delete/', methods = ['GET', 'POST'])
-def deleteItem(item_id, category_id):
+@app.route('/category/<category_name>/item/<item_name>/delete/', methods = ['GET', 'POST'])
+def deleteItem(item_name, category_name):
     # if 'username' not in login_session:
     #     return redirect('/login/')
-    category = session.query(Category).filter_by(id = category_id).one()
-    deletedItem = session.query(Item).filter_by(id = item_id).one()
+    category = session.query(Category).filter_by(name = category_name).one()
+    deletedItem = session.query(Item).filter_by(name = item_name).one()
     if request.method == 'POST':
         session.delete(deletedItem)
         session.commit()
         flash_string = "%s has been deleted" % deletedItem.name
         flash(flash_string)
-        return redirect(url_for('showItemList', category_id = category.id))
+        return redirect(url_for('showItemList', category_name = category.name))
     else:
         # return render_template('deleteitem.html', category = category, item = deletedItem, login_session = login_session)
         return render_template('deleteitem.html', category = category, item = deletedItem)

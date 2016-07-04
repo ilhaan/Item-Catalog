@@ -7,7 +7,7 @@
 
   <h1> Add new item to {{ category.name }} </h1>
 
-  <form action = "{{ url_for('newItem', category_id = category.id)}}", method = 'post'>
+  <form action = "{{ url_for('newItem', category_name = category.name)}}", method = 'post'>
     <p> Item: </p>
     <input type = 'text' size = '30' name = 'name' placeholder="Item name">
 
@@ -21,7 +21,7 @@
 
     <input type = 'submit' value = 'Create'>
 
-    <a href = '{{url_for('showItemList', category_id = category.id)}}'> Cancel </a>
+    <a href = '{{url_for('showItemList', category_name = category.name)}}'> Cancel </a>
   </form>
 
 </body>
