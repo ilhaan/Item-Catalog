@@ -3,6 +3,14 @@
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css')}}"
 </head>
 
+<div class="row top-menu">
+	<div class="col-md-6 text-left">
+		<a href="{{url_for('showCategories')}}">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Categories
+		</a>
+	</div>
+</div>
+
 <body>
   <div class = 'flash'>
         {% with messages = get_flashed_messages() %}
@@ -16,7 +24,14 @@
       {% endwith %}
   </div>
 
-  <h1> Create new category </h1>
+  <div class="row main-header">
+    <div class="col-md-1"></div>
+    <div class="col-md-10 padding-none">
+      <h1>Create a new category</h1>
+    </div>
+  </div>
+
+  <center>
 
   <form action = "#", method = 'post'>
 
@@ -26,6 +41,8 @@
     <input type = 'submit' value = 'Create'>
 
   </form>
+
+</center> 
 
 </body>
 
