@@ -15,10 +15,10 @@ session = DBSession()
 
 class User(Base):
     __tablename__ = 'user'
+    id = Column(Integer, primary_key = True, nullable = True, autoincrement = True)
     name = Column(String(80), primary_key = True)
     email = Column(String(80), nullable = False)
     picture = Column(String(250), nullable = False)
-    id = Column(Integer, primary_key = True)
 
     @property
     def serialize(self):
