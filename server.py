@@ -114,26 +114,44 @@ def gconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
-    credentials = login_session.get('credentials')
-    if credentials is None:
-        response = make_response(json.dumps('Current user not connected'), 401)
-        response.headers['Connect-Type'] = 'application/json'
-        return response
-    access_token = credentials.access_token
+    credentials = json.loads(login_session['credentials'].to_json())
+    access_token = credentials['access_token']
+    print 'In gdisconnect access token is %s', access_token
+    print 'User name is: '
+    print login_session['username']
+    if access_token is None:
+ 	print 'Access Token is None'
+    	response = make_response(json.dumps('Current user not connected.'), 401)
+    	response.headers['Content-Type'] = 'application/json'
+    	return response
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-
+    print 'result is '
+    print result
     if result['status'] == '200':
-        response = make_response(json.dumps('Successfully disconnected'), 200)
-        response.headers['Connect-Type'] = 'application/json'
-        return response
+	# del login_session['access_token']
+    	# del login_session['gplus_id']
+    	del login_session['username']
+    	del login_session['email']
+    	del login_session['picture']
+    	response = make_response(json.dumps('Successfully disconnected.'), 200)
+    	response.headers['Content-Type'] = 'application/json'
+    	print response
+        return redirect(url_for('showCategories'))
+    else:
+    	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+    	response.headers['Content-Type'] = 'application/json'
+    	return response
 
 @app.route('/')
 @app.route('/catalog')
 def showCategories():
     categories = session.query(Category).all();
-    return render_template('categories.html', categories = categories)
+    if 'username' not in login_session:
+        return render_template('publiccategories.html', categories = categories, login_session = login_session)
+    else:
+        return render_template('categories.html', categories = categories, login_session = login_session)
     # return "This is the main page. All categories will be listed here."
 
 @app.route('/category/<category_name>')
