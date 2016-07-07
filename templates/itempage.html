@@ -27,11 +27,12 @@
 		<p> {{item.description}} </p>
 	</div>
 
+	{%if 'username' in login_session %}
 	<div class = "row">
 		<a href='{{url_for('editItem', item_name=item.name, category_name = category.name)}}' >Edit</a>
 		<a href='{{url_for('deleteItem', item_name=item.name, category_name = category.name)}}' >Delete</a>
 	</div>
-
+	{% endif %}
 
  </div> <!-- end pane -->
 </body>
