@@ -116,9 +116,8 @@ def gconnect():
 def gdisconnect():
     credentials = json.loads(login_session['credentials'].to_json())
     access_token = credentials['access_token']
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
+    print 'In gdisconnect access token is %s' % access_token
+    print 'User name is: %s ' % login_session['username']
     if access_token is None:
  	print 'Access Token is None'
     	response = make_response(json.dumps('Current user not connected.'), 401)
@@ -143,6 +142,7 @@ def gdisconnect():
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
     	response.headers['Content-Type'] = 'application/json'
     	return response
+        # return redirect(url_for('gdisconnect'))
 
 @app.route('/')
 @app.route('/catalog')
@@ -157,13 +157,9 @@ def showCategories():
 @app.route('/category/<category_name>')
 def showItemList(category_name):
     category = session.query(Category).filter_by(name = category_name).one()
-    # creator = getUserInfo(category.user_id)
     items = session.query(Item).filter_by(category_id = category.id).all()
-    # if 'username' not in login_session or creator.id != login_session['user_id']:
-    #     return render_template('publicitemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
-    # else:
-    #     return render_template('itemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
-    return render_template('itemlist.html', category = category, items = items)
+    return render_template('itemlist.html', category = category, items = items, login_session = login_session)
+    # return render_template('itemlist.html', category = category, items = items)
 
 @app.route('/category/<category_name>/<item_name>')
 def showItemPage(category_name, item_name):
@@ -171,10 +167,10 @@ def showItemPage(category_name, item_name):
     # creator = getUserInfo(category.user_id)
     item = session.query(Item).filter_by(category_id = category.id, name = item_name).one()
     # if 'username' not in login_session or creator.id != login_session['user_id']:
-    #     return render_template('publicitemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
+    #     return render_template('publicitempage.html', category = category, item = item, login_session = login_session)
     # else:
-    #     return render_template('itemlist.html', restaurant = restaurant, items = items, creator = creator, login_session = login_session)
-    return render_template('itempage.html', category = category, item = item)
+    #     return render_template('itempage.html', category = category, item = item, login_session = login_session)
+    return render_template('itempage.html', category = category, item = item, login_session = login_session)
 
 @app.route('/category/new/', methods = ['GET', 'POST'])
 def newCategory():
@@ -211,12 +207,12 @@ def newCategory():
 
 @app.route('/category/<category_name>/item/new/', methods = ['GET', 'POST'])
 def newItem(category_name):
-    # if 'username' not in login_session:
-    #     return redirect('/login/')
+    if 'username' not in login_session:
+        return redirect('/login/')
     category = session.query(Category).filter_by(name = category_name).one()
     if request.method == 'POST':
-        # newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'], price = request.form['price'], user_id = restaurant.user_id)
-        newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'])
+        newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'], user_id = login_session['user_id'])
+        # newItem = Item(name = request.form['name'], category_id = category.id, description = request.form['description'])
 
         # Initialize duplicate name flag
         name_exists = False
@@ -245,38 +241,56 @@ def newItem(category_name):
 
 @app.route('/category/<category_name>/item/<item_name>/edit/', methods = ['GET', 'POST'])
 def editItem(item_name, category_name):
-    # if 'username' not in login_session:
-    #     return redirect('/login/')
+    if 'username' not in login_session:
+        return redirect('/login/')
+
     category = session.query(Category).filter_by(name = category_name).one()
     editedItem = session.query(Item).filter_by(name = item_name).one()
+
     if request.method == 'POST':
-        if request.form['name']:
-            editedItem.name = request.form['name']
-        if request.form['description']:
-            editedItem.description = request.form['description']
-        # if request.form['price']:
-        #     editedItem.price = request.form['price']
-        session.add(editedItem)
-        session.commit()
-        flash_string = "%s has been edited" % editedItem.name
-        flash(flash_string)
-        return redirect(url_for('showItemList', category_name = category.name))
+        # Check if user is the owner of the item
+        if editedItem.user_id == login_session['user_id']:
+            # User is the owner, allow edit to proceed
+            if request.form['name']:
+                editedItem.name = request.form['name']
+            if request.form['description']:
+                editedItem.description = request.form['description']
+            session.add(editedItem)
+            session.commit()
+            flash_string = "%s has been edited" % editedItem.name
+            flash(flash_string)
+            return redirect(url_for('showItemList', category_name = category.name))
+        else:
+            # User is not the ownder, edit cannot proceed
+            flash_string = "You do not have permission to edit %s." % editedItem.name
+            flash(flash_string)
+            return redirect(url_for('showItemList', category_name = category.name))
     else:
         # return render_template('edititem.html', category = category, item = editedItem, login_session = login_session)
         return render_template('edititem.html', category = category, item = editedItem)
 
 @app.route('/category/<category_name>/item/<item_name>/delete/', methods = ['GET', 'POST'])
 def deleteItem(item_name, category_name):
-    # if 'username' not in login_session:
-    #     return redirect('/login/')
+    if 'username' not in login_session:
+        return redirect('/login/')
+
     category = session.query(Category).filter_by(name = category_name).one()
     deletedItem = session.query(Item).filter_by(name = item_name).one()
+
     if request.method == 'POST':
-        session.delete(deletedItem)
-        session.commit()
-        flash_string = "%s has been deleted" % deletedItem.name
-        flash(flash_string)
-        return redirect(url_for('showItemList', category_name = category.name))
+        # Check if user is the owner of the item
+        if deletedItem.user_id == login_session['user_id']:
+            # User is the owner, allow delete operation to proceed
+            session.delete(deletedItem)
+            session.commit()
+            flash_string = "%s has been deleted" % deletedItem.name
+            flash(flash_string)
+            return redirect(url_for('showItemList', category_name = category.name))
+        else:
+            # User is not the owner, do not allow delete operation to proceed
+            flash_string = "You do not have permission to delete %s." % deletedItem.name
+            flash(flash_string)
+            return redirect(url_for('showItemList', category_name = category.name))
     else:
         # return render_template('deleteitem.html', category = category, item = deletedItem, login_session = login_session)
         return render_template('deleteitem.html', category = category, item = deletedItem)
@@ -305,6 +319,7 @@ def getUserID(email):
 
 def getUserInfo(user_id):
     user = session.query(User).filter_by(id = user_id).one()
+    # print user
     return user
 
 if __name__ == '__main__':
