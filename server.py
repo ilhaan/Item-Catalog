@@ -141,6 +141,9 @@ def gdisconnect():
         flash(flash_string)
         return redirect(url_for('showCategories'))
     else:
+        # del login_session['username']
+    	# del login_session['email']
+    	# del login_session['picture']
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
     	response.headers['Content-Type'] = 'application/json'
     	return response
