@@ -34,11 +34,13 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-top">
 			<p></p>
+			{%if 'username' in login_session %}
 			<a href="{{url_for('newCategory')}}">
 				<button class="btn btn-default" id="new-category">
 					<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Add Category
 				</button>
 			</a>
+			{% endif %}
 		</div>
 		<div class="col-md-5"></div>
 	</div>
