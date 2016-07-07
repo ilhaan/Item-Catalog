@@ -2,58 +2,46 @@
 {% extends "main.html" %}
 {% block content %}
 {% include "header.html" %}
-	<div class="row top-menu">
-		<div class="col-md-10"></div>
-		<div class="col-md-2 text-right">
-			<a href="{{url_for('showLogin')}}">
-		</div>
-	</div>
-	<div class="row divider blue">
-		<div class="col-md-12"></div>
-	</div>
-	<div class="row main-header">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 padding-none">
-			<h1>Categories</h1>
-		</div>
-	</div>
 
-<div class = 'flash'>
-		  {% with messages = get_flashed_messages() %}
-      	{% if messages %}
-	        <ul>
-	        {% for message in messages %}
-	            <li> <strong> {{ message }} </strong> </li>
-	        {% endfor %}
-	        </ul>
-        {% endif %}
-		  {% endwith %}
+<!-- Message flash section -->
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<div class ="alert alert-success">
+	    {% for message in messages %}
+	        <li> <strong> {{ message }} </strong> </li>
+	    {% endfor %}
+		</div>
+  {% endif %}
+{% endwith %}
+
+<!-- Jumbotron to show categories title and small description -->
+<div class="jumbotron">
+	<h1>Categories</h1>
+	<p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+	<!-- <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p> -->
 </div>
 
-	<div class="row padding-top padding-bottom">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 padding-top">
-			<p></p>
-			{%if 'username' in login_session %}
-			<a href="{{url_for('newCategory')}}">
-				<button class="btn btn-default" id="new-category">
-					<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Add Category
-				</button>
-			</a>
-			{% endif %}
-		</div>
-		<div class="col-md-5"></div>
-	</div>
-
-	{% for category in categories %}
-		<a href = "{{url_for('showItemList', category_name = category.name)}}">
-			<div class="row">
-				<div class="col-md-1"></div>
-					<div class="col-md-10 category-list">
-						<h3>{{category.name}}</h3>
-					</div>
-				<div class="col-md-1"></div>
-			</div>
+<!-- Show Add Category button if user is logged in -->
+<div class="row marketing">
+	<div class="col-lg-6">
+		{%if 'username' in login_session %}
+		<a href="{{url_for('newCategory')}}">
+			<button class="btn btn-lg btn-primary" id="new-category">
+				<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Add Category
+			</button>
 		</a>
-	{% endfor %}
+		{% endif %}
+	</div>
+</div>
+
+<!-- Show all categories -->
+{% for category in categories %}
+<div class="row marketing">
+	<div class="col-lg-6">
+	  <a href = "{{url_for('showItemList', category_name = category.name)}}"><h3>{{category.name}}</h3></a>
+	  <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+	</div>
+</div>
+{% endfor %}
+
 {% endblock %}
