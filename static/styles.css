@@ -1,37 +1,81 @@
-body            { font-family: sans-serif; background-color: #CACFD1}
-h1, h2, h3, h4       { color: black; }
-h1, h2          { font-family: 'Georgia', serif; margin: 0; }
-h1              { border-bottom: 2px solid #eee; }
-h2              { font-size: 1.2em; }
+/* This stylesheet was obtained from: http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css */
 
-p, dd, dt               { color: black;}
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 
-a {text-decoration: none; color:#18B10F; font-size: 1em;}
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
 
-/*Item page pane*/
-.pane {position:absolute; left: 25%; border: 2px solid;
-    border-radius: 25px; padding: 5px; margin: 5px; border-color: #999999;
-    background-color: #ff8c00; width: 50% }
+/* Custom page header */
+.header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+}
 
-/*Item page header (shows category name)*/
-.header {left:50%; text-align: center; background-color: #F56F00;}
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
 
-.name {width:50%; float: center;}
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
 
-.description {padding: 10px; font-style: italic}
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
 
-.price {text-align: right; width:50%; float: right; }
+/* Supporting marketing content */
+.marketing {
+  margin: 40px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
 
-.editdeletepane {}
-
-/*Flash messages displayed on every page*/
-.flash          { background: #cee5F5; }
-
-/*Top bar (displays login and show all categories)*/
-.top-menu{background-color: #2E45B6; text-align: center;}
-
-/*Main page header*/
-.main-header{background-color: #AC26D3; text-align: center;}
-
-/*Item list on item page*/
-.item-name {text-align: center;}
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+  }
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}

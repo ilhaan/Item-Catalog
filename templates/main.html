@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-		<!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}"> -->
+		<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Udacity Project 3: Item Catalog">
+    <meta name="author" content="Ilhaan Rasheed">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
 	</head>
 
 	<body>
-
 		<div class="container">
 			{% block content %}
 			{% endblock %}
 
-			<!-- <footer class="footer">
-				<p>&copy; 2015 Company, Inc.</p>
-	    </footer> -->
+			<footer class="footer">
+				<p>&copy; 2016 Ilhaan Rasheed, Inc.</p>
+			</footer>
 
-		</div>
+		</div> <!-- close container -->
 
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</body>
-
 </html>
