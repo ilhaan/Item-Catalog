@@ -24,7 +24,7 @@
 <div class="row marketing">
 	<div class="col-lg-6">
 		{%if 'username' in login_session %}
-		<a href="{{url_for('newCategory')}}">
+		<a href="{{url_for('newItem', category_name = category.name)}}">
 			<button class="btn btn-lg btn-primary" id="new-item">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create New Item
 			</button>
