@@ -3,7 +3,6 @@
 		<ul class="nav nav-pills pull-right">
 			<li role="presentation" class="active"><a href="{{url_for('showCategories')}}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Categories</a></li>
       <li role="presentation">{%if 'username' not in login_session %}<a href="{{url_for('showLogin')}}">Login </a>{% else %}<a href="{{url_for('gdisconnect')}}">Logout </a>{% endif %}</li>
-      <li role="presentation"><a href="#">Contact</a></li>
     </ul>
 	</nav>
   <h3 class="text-muted">Udacity Project 3: Item Catalog</h3>
