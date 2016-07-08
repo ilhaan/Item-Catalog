@@ -1,19 +1,30 @@
-<html>
-<head>
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css')}}"
-</head>
 
-<body>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
 
-  <h1> Are you sure you want to delete {{item.name}} from {{ category.name }}? </h1>
+<!-- Message flash section -->
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<div class ="alert alert-success">
+	    {% for message in messages %}
+	        <li> <strong> {{ message }} </strong> </li>
+	    {% endfor %}
+		</div>
+  {% endif %}
+{% endwith %}
 
-  <p>
+<!-- Title with instructions -->
+<div class="paragraph">
+	<h1> Are you sure you want to delete {{item.name}} from {{ category.name }}? </h1>
+</div>
 
-  <form action="{{ url_for('deleteItem',category_name = category.name, item_name = item.name)}}" method = 'post'>
-    <input type='submit', value = 'Delete'>
-    <a href = '{{url_for('showItemList', category_name = category.name)}}'> Cancel </a>
-  </form>
+<!-- Form to delete item -->
+<form action="{{ url_for('deleteItem',category_name = category.name, item_name = item.name)}}" method = 'post'>
+  <button type="submit" class="btn btn-primary">Delete</button>
+  <a href = '{{url_for('showItemList', category_name = category.name)}}'> <button type="button" class="btn btn-link">Cancel</button> </a>
+</form>
 
-</body>
+<p><p>
 
-</html>
+{% endblock %}

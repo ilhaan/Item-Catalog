@@ -1,25 +1,41 @@
-<html>
-<head>
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css')}}"
-</head>
 
-<body>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
 
-  <h1> Edit {{ item.name }} in {{ category.name }} </h1>
+<!-- Message flash section -->
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<div class ="alert alert-success">
+	    {% for message in messages %}
+	        <li> <strong> {{ message }} </strong> </li>
+	    {% endfor %}
+		</div>
+  {% endif %}
+{% endwith %}
 
-  <form action = "{{ url_for('editItem', category_name=category.name, item_name = item.name) }}", method = 'post'>
-    <p> Edit: </p>
-    <input type = 'text' size = '30' name = 'name' placeholder = "{{item.name}}">
+<!-- Show item title and instructions -->
+<div class="paragraph">
+	<h1>Edit {{ item.name }} in {{ category.name }}</h1>
+	<p class="lead">Edit item name and description below</p>
+</div>
 
-    <p> Description: </p>
-    <input type = 'text' size = '30' name = 'description' placeholder="{{item.description}}">
+<!-- Form to edit item -->
+<form action = "{{ url_for('editItem', category_name=category.name, item_name = item.name) }}", method = 'post'>
+  <fieldset class="form-group">
+    <label>Name</label>
+    <input type="text" name = 'name' class="form-control" placeholder = "{{item.name}}">
+  </fieldset>
 
-    <p>
+  <fieldset class="form-group">
+    <label>Description</label>
+    <textarea class="form-control" name = 'description' rows="3" placeholder="{{item.description}}"></textarea>
+  </fieldset>
 
-    <input type = 'submit' value = 'Edit'>
-    <a href = '{{url_for('showItemList', category_name = category.name)}}'> Cancel </a>
-  </form>
+  <button type="submit" class="btn btn-primary">Edit</button>
+  <a href = '{{url_for('showItemList', category_name = category.name)}}'> <button type="button" class="btn btn-link">Cancel</button> </a>
+</form>
 
-</body>
+<p><p>
 
-</html>
+{% endblock %}
