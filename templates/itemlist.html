@@ -38,7 +38,7 @@
 <div class="row marketing">
 	<div class="col-lg-6">
 		<a href = "{{url_for('showItemPage', category_name = category.name, item_name = i.name)}}"><h3>{{i.name}}</h3></a>
-		<p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+		<p> {{ i.description }} </p>
 		</a>
 	</div>
 </div>
