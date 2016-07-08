@@ -1,49 +1,39 @@
-<html>
-<head>
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css')}}"
-</head>
 
-<div class="row top-menu">
-	<div class="col-md-6 text-left">
-		<a href="{{url_for('showCategories')}}">
-			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Categories
-		</a>
-	</div>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<!-- Message flash section -->
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<div class ="alert alert-success">
+	    {% for message in messages %}
+	        <li> <strong> {{ message }} </strong> </li>
+	    {% endfor %}
+		</div>
+  {% endif %}
+{% endwith %}
+
+<!-- Show categories title and instructions -->
+<div class="paragraph">
+	<h1>Create a new category</h1>
+	<p class="lead">Enter a name and description for your new cateogry below</p>
 </div>
 
-<body>
-  <div class = 'flash'>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul>
-            {% for message in messages %}
-                <li> <strong> {{ message }} </strong> </li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-      {% endwith %}
-  </div>
+<form action = "#", method = 'post'>
+  <fieldset class="form-group">
+    <label>Name</label>
+    <input type="text" name = 'name' class="form-control" placeholder="Enter category name">
+  </fieldset>
 
-  <div class="row main-header">
-    <div class="col-md-1"></div>
-    <div class="col-md-10 padding-none">
-      <h1>Create a new category</h1>
-    </div>
-  </div>
+  <fieldset class="form-group">
+    <label>Description</label>
+    <textarea class="form-control" name = 'description' rows="3" placeholder="Enter a brief description"></textarea>
+  </fieldset>
 
-  <center>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
 
-  <form action = "#", method = 'post'>
+<p><p>
 
-    <p> Name: </p>
-    <input type = 'text' size = '30' name = 'name'>
-
-    <input type = 'submit' value = 'Create'>
-
-  </form>
-
-</center> 
-
-</body>
-
-</html>
+{% endblock %}
