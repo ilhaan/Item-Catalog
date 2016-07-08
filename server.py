@@ -179,7 +179,7 @@ def newCategory():
     #     return redirect('/login/')
     if request.method == 'POST':
         # newCategory = Category(name = request.form['name'], user_id = login_session['user_id'])
-        newCategory = Category(name = request.form['name'])
+        newCategory = Category(name = request.form['name'], description = request.form['description'])
 
         # Initialize duplicate name flag to false
         name_exists = False

@@ -17,8 +17,7 @@
 <!-- Jumbotron to show categories title and small description -->
 <div class="jumbotron">
 	<h1>Categories</h1>
-	<p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-	<!-- <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p> -->
+	<p class="lead">Welcome to my Item Catalog Project! This is a web application that provides a list of items within a variety of categories. In order to create categories and items, you need to login.</p>
 </div>
 
 <!-- Show Add Category button if user is logged in -->
@@ -39,7 +38,7 @@
 <div class="row marketing">
 	<div class="col-lg-6">
 	  <a href = "{{url_for('showItemList', category_name = category.name)}}"><h3>{{category.name}}</h3></a>
-	  <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+	  <p>{{category.description}}</p>
 	</div>
 </div>
 {% endfor %}
