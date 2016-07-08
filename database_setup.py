@@ -33,6 +33,7 @@ class Category(Base):
     __tablename__ = 'category'
     name = Column(String(80), nullable = False)
     id = Column(Integer, primary_key = True)
+    description = Column(String(250))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
