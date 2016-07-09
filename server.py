@@ -199,6 +199,8 @@ def showItemPage(category_name, item_name):
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
     """Create new category"""
+    if 'username' not in login_session:
+        return redirect('/login/')
     if request.method == 'POST':
         newCategory = Category(name=request.form['name'],
                                description=request.form['description'])
