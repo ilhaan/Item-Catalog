@@ -4,6 +4,7 @@ from flask import (Flask, render_template, request, redirect, url_for, flash,
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, Item
+from functools import wraps
 
 # OAuth stuff
 from flask import session as login_session
@@ -168,6 +169,18 @@ def gdisconnect():
         return response
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash_string = "Sign-in required for access"
+            flash(flash_string)
+            return redirect('/login/')
+    return decorated_function
+
+
 @app.route('/')
 @app.route('/catalog')
 def showCategories():
@@ -197,10 +210,9 @@ def showItemPage(category_name, item_name):
 
 
 @app.route('/category/new/', methods=['GET', 'POST'])
+@login_required
 def newCategory():
     """Create new category"""
-    if 'username' not in login_session:
-        return redirect('/login/')
     if request.method == 'POST':
         newCategory = Category(name=request.form['name'],
                                description=request.form['description'])
@@ -231,10 +243,9 @@ def newCategory():
 
 
 @app.route('/category/<category_name>/item/new/', methods=['GET', 'POST'])
+@login_required
 def newItem(category_name):
     """Create new item"""
-    if 'username' not in login_session:
-        return redirect('/login/')
     category = session.query(Category).filter_by(name=category_name).one()
     if request.method == 'POST':
         newItem = Item(name=request.form['name'],
@@ -271,11 +282,9 @@ def newItem(category_name):
 
 @app.route('/category/<category_name>/item/<item_name>/edit/',
            methods=['GET', 'POST'])
+@login_required
 def editItem(item_name, category_name):
     """Edit existing item"""
-    if 'username' not in login_session:
-        return redirect('/login/')
-
     category = session.query(Category).filter_by(name=category_name).one()
     editedItem = session.query(Item).filter_by(name=item_name).one()
 
@@ -307,11 +316,9 @@ def editItem(item_name, category_name):
 
 @app.route('/category/<category_name>/item/<item_name>/delete/',
            methods=['GET', 'POST'])
+@login_required
 def deleteItem(item_name, category_name):
     """Delete existing item"""
-    if 'username' not in login_session:
-        return redirect('/login/')
-
     category = session.query(Category).filter_by(name=category_name).one()
     deletedItem = session.query(Item).filter_by(name=item_name).one()
 
